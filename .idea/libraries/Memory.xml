@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="memory">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/memory.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

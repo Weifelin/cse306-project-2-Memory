@@ -1,11 +1,15 @@
+/**
+ * @Author Weifeng
+ * @StudentID 110161112
+ */
+
 package osp.Memory;
 
 import osp.Hardware.*;
-import osp.Tasks.*;
-import osp.Threads.*;
 import osp.Devices.*;
-import osp.Utilities.*;
 import osp.IFLModules.*;
+import osp.Threads.ThreadCB;
+
 /**
    The PageTableEntry object contains information about a specific virtual
    page in memory, including the page frame in which it resides.
@@ -25,9 +29,13 @@ public class PageTableEntry extends IflPageTableEntry
 
        @OSPProject Memory
     */
+
+    private long timestamp;
     public PageTableEntry(PageTable ownerPageTable, int pageNumber)
     {
         // your code goes here
+        super(ownerPageTable, pageNumber);
+        timestamp = HClock.get();
 
     }
 
@@ -48,6 +56,30 @@ public class PageTableEntry extends IflPageTableEntry
     public int do_lock(IORB iorb)
     {
         // your code goes here
+        ThreadCB threadCB = iorb.getThread();
+        this.setTimestamp(HClock.get());
+
+        int ret = SUCCESS;
+
+        if(!isValid()){
+
+            if(getValidatingThread() == null){
+            //pagefault occurs when getValidatingThread returns null.
+                ret = PageFaultHandler.handlePageFault(threadCB, MemoryLock, this);
+            }else if(getValidatingThread().getID() == threadCB.getID()){
+                getFrame().incrementLockCount();
+                return SUCCESS;
+            }else {
+                threadCB.suspend(this);
+            }
+        }
+
+        if(threadCB.getStatus() == ThreadKill || ret == FAILURE){
+            return FAILURE;
+        }
+
+        getFrame().incrementLockCount();
+        return SUCCESS;
 
     }
 
@@ -60,7 +92,20 @@ public class PageTableEntry extends IflPageTableEntry
     public void do_unlock()
     {
         // your code goes here
+        if(getFrame().getLockCount() >= 1){
+            getFrame().decrementLockCount();
+        }
 
+    }
+
+
+
+    public long getTimestamp(){
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp){
+        this.timestamp = timestamp;
     }
 
 
@@ -73,3 +118,7 @@ public class PageTableEntry extends IflPageTableEntry
 /*
       Feel free to add local classes to improve the readability of your code
 */
+
+/*
+    I pledge my honor that all parts of this project were done by me individually, without collaboration with anyone, and without consulting external sources that help with similar projects.
+ */

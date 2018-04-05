@@ -1,3 +1,8 @@
+/**
+ * @Author Weifeng
+ * @StudentID 110161112
+ */
+
 package osp.Memory;
 import java.util.*;
 import osp.Hardware.*;
@@ -78,7 +83,151 @@ public class PageFaultHandler extends IflPageFaultHandler
     {
         // your code goes here
 
+		if (page.isValid()){
+			return FAILURE;
+		}
+
+		MyOut.print(thread, "Current page is "+page+ ", and page.isValid()="+page.isValid());
+		FrameTableEntry frame = getFramebyLRU();
+
+		if (frame == null){
+			return NotEnoughMemory;
+		}
+
+		SystemEvent event = new SystemEvent("PageFault");
+		thread.suspend(event);
+
+		if (thread.getStatus() == ThreadKill){
+			return FAILURE;
+		}
+		
+		page.setValidatingThread(thread);
+		frame.setReserved(thread.getTask());
+		
+		PageTableEntry frame_page = frame.getPage();
+		
+		if (frame_page != null){
+			
+			if (frame.isDirty()){//dirty page, swap out
+				swap_out(frame, thread);
+
+				if (thread.getStatus()==ThreadKill){
+					page.notifyThreads();
+					event.notifyThreads();
+					ThreadCB.dispatch();
+					return FAILURE;
+				}
+			}
+
+			//clean page, free it
+			frame.setReferenced(false);
+			frame.setPage(null);
+			frame.setDirty(false);
+			frame_page.setValid(false);
+			frame_page.setFrame(null);
+		}
+
+		//perform swap in
+		page.setFrame(frame);
+		swap_in(page, thread);
+		page.setTimestamp(HClock.get());
+		if (thread.getStatus()==ThreadKill){
+			page.notifyThreads();
+			page.setValidatingThread(null);
+			event.notifyThreads();
+			ThreadCB.dispatch();
+			return FAILURE;
+		}
+
+		frame.setPage(page);
+		page.setValid(true);
+
+		frame.setUnreserved(thread.getTask());
+		page.setValidatingThread(null);
+		page.notifyThreads();
+		event.notifyThreads();
+		ThreadCB.dispatch();
+		return SUCCESS;
+
+		
+
+
     }
+
+	private static void swap_out(FrameTableEntry frame, ThreadCB thread) {
+    	PageTableEntry page = frame.getPage();
+    	TaskCB task = page.getTask();
+    	OpenFile swapfile = task.getSwapFile();
+    	swapfile.write(page.getID(), page, thread);
+	}
+
+	private static void swap_in(PageTableEntry page, ThreadCB thread) {
+		TaskCB task = page.getTask();
+		OpenFile swapFile = task.getSwapFile();
+		swapFile.read(page.getID(), page, thread);
+	}
+
+
+	private static FrameTableEntry getFramebyLRU(){
+    	FrameTableEntry tempframe = null;
+    	FrameTableEntry oldestFrame = null;
+    	int frameTableSize = MMU.getFrameTableSize();
+
+    	for (int i=0; i <frameTableSize; i++){
+    		//looking for free frame
+			oldestFrame = MMU.getFrame(i);
+			if (oldestFrame.getPage()==null && !oldestFrame.isReserved() && oldestFrame.getLockCount()==0){
+				return oldestFrame;
+			}
+		}
+
+//		for (int i=0; i <frameTableSize; i++){
+//			//no free frame, but clean frame, this clean frame should be freed.
+//			oldestFrame = MMU.getFrame(i);
+//			if (!oldestFrame.isDirty() && !oldestFrame.isReserved() && oldestFrame.getLockCount()==0){
+//				return oldestFrame;
+//			}
+//		}
+
+
+    	int isUpdated = 0;
+
+    	int index = 0;
+		tempframe = MMU.getFrame(index);
+    	PageTableEntry temp_page = tempframe.getPage();//picking smallest not null timestamp
+		while(temp_page == null){
+			index++;
+			tempframe = MMU.getFrame(index);
+			temp_page = tempframe.getPage();
+		}
+
+
+
+
+		for (int i=0; i <frameTableSize; i++){
+			//at this point, no free frames, use LRU
+			FrameTableEntry frameTableEntry = MMU.getFrame(i);
+			//PageTableEntry pageTableEntry = frameTableEntry.getPage();
+			if (!frameTableEntry.isReserved() && frameTableEntry.getLockCount()==0) {
+				if (temp_page.getTimestamp() >= frameTableEntry.getPage().getTimestamp()) {
+					if (!frameTableEntry.isReserved() && frameTableEntry.getLockCount() == 0) {
+						//flag here
+						isUpdated++;
+						tempframe = frameTableEntry;
+						temp_page = frameTableEntry.getPage();
+					}
+				}
+			}
+		}
+
+		if (isUpdated>0){
+			oldestFrame = tempframe;
+			return oldestFrame;
+		}else {
+			return null;
+		}
+
+	}//end of method
 
 
     /*
@@ -90,3 +239,7 @@ public class PageFaultHandler extends IflPageFaultHandler
 /*
       Feel free to add local classes to improve the readability of your code
 */
+
+/*
+    I pledge my honor that all parts of this project were done by me individually, without collaboration with anyone, and without consulting external sources that help with similar projects.
+ */
