@@ -87,7 +87,7 @@ public class PageFaultHandler extends IflPageFaultHandler
 			return FAILURE;
 		}
 
-		MyOut.print(thread, "Current page is "+page+ ", and page.isValid()="+page.isValid());
+		//MyOut.print(thread, "Current page is "+page+ ", and page.isValid()="+page.isValid());
 		FrameTableEntry frame = getFramebyLRU();
 
 		if (frame == null){
@@ -195,7 +195,7 @@ public class PageFaultHandler extends IflPageFaultHandler
     	int index = 0;
 		tempframe = MMU.getFrame(index);
     	PageTableEntry temp_page = tempframe.getPage();//picking smallest not null timestamp
-		while(temp_page == null){
+		while(temp_page == null || tempframe.isReserved() || tempframe.getLockCount()>0){
 			index++;
 			tempframe = MMU.getFrame(index);
 			temp_page = tempframe.getPage();

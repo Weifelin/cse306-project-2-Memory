@@ -58,6 +58,7 @@ public class PageTableEntry extends IflPageTableEntry
         // your code goes here
         ThreadCB threadCB = iorb.getThread();
         this.setTimestamp(HClock.get());
+        //getFrame().incrementLockCount();
 
         int ret = SUCCESS;
 
@@ -66,10 +67,9 @@ public class PageTableEntry extends IflPageTableEntry
             if(getValidatingThread() == null){
             //pagefault occurs when getValidatingThread returns null.
                 ret = PageFaultHandler.handlePageFault(threadCB, MemoryLock, this);
-            }else if(getValidatingThread().getID() == threadCB.getID()){
-                getFrame().incrementLockCount();
-                return SUCCESS;
-            }else {
+            }else if(getValidatingThread().getID() != threadCB.getID()){
+//                getFrame().incrementLockCount();
+//                return SUCCESS;
                 threadCB.suspend(this);
             }
         }

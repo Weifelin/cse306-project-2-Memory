@@ -2,14 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="26082c4f-0067-4514-adf9-0c291b6b892f" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/Red.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Memory.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/osp/Memory/FrameTableEntry.java" afterPath="$PROJECT_DIR$/osp/Memory/FrameTableEntry.java" />
-      <change beforePath="$PROJECT_DIR$/osp/Memory/MMU.java" afterPath="$PROJECT_DIR$/osp/Memory/MMU.java" />
+      <change beforePath="$PROJECT_DIR$/osp/Memory/OSP.log" afterPath="$PROJECT_DIR$/osp/Memory/OSP.log" />
       <change beforePath="$PROJECT_DIR$/osp/Memory/PageFaultHandler.java" afterPath="$PROJECT_DIR$/osp/Memory/PageFaultHandler.java" />
-      <change beforePath="$PROJECT_DIR$/osp/Memory/PageTable.java" afterPath="$PROJECT_DIR$/osp/Memory/PageTable.java" />
       <change beforePath="$PROJECT_DIR$/osp/Memory/PageTableEntry.java" afterPath="$PROJECT_DIR$/osp/Memory/PageTableEntry.java" />
+      <change beforePath="$PROJECT_DIR$/osp/Memory/osp/Memory/PageFaultHandler.class" afterPath="$PROJECT_DIR$/osp/Memory/osp/Memory/PageFaultHandler.class" />
+      <change beforePath="$PROJECT_DIR$/osp/Memory/osp/Memory/PageTableEntry.class" afterPath="$PROJECT_DIR$/osp/Memory/osp/Memory/PageTableEntry.class" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,11 +19,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MMU.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MMU.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/osp/Memory/MMU.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="194" column="42" lean-forward="false" selection-start-line="194" selection-start-column="42" selection-end-line="194" selection-end-column="42" />
+            <state relative-caret-position="443">
+              <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PageTableEntry.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/osp/Memory/PageTableEntry.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="186">
+              <caret line="60" column="42" lean-forward="true" selection-start-line="60" selection-start-column="42" selection-end-line="60" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -34,8 +42,8 @@
       <file leaf-file-name="OSP.log" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/osp/Memory/OSP.log">
           <provider selected="true" editor-type-id="LogFileEditorProvider">
-            <state relative-caret-position="625">
-              <caret line="96758" column="30" lean-forward="false" selection-start-line="96758" selection-start-column="30" selection-end-line="96758" selection-end-column="30" />
+            <state relative-caret-position="697">
+              <caret line="2838" column="59" lean-forward="true" selection-start-line="2838" selection-start-column="59" selection-end-line="2838" selection-end-column="59" />
             </state>
           </provider>
         </entry>
@@ -53,8 +61,8 @@
       <file leaf-file-name="PageFaultHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/osp/Memory/PageFaultHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="210" column="16" lean-forward="false" selection-start-line="210" selection-start-column="16" selection-end-line="210" selection-end-column="16" />
+            <state relative-caret-position="474">
+              <caret line="198" column="20" lean-forward="false" selection-start-line="198" selection-start-column="20" selection-end-line="198" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -81,8 +89,8 @@
         <option value="$PROJECT_DIR$/osp/Memory/FrameTableEntry.java" />
         <option value="$PROJECT_DIR$/osp/Memory/MMU.java" />
         <option value="$PROJECT_DIR$/osp/Memory/PageTable.java" />
-        <option value="$PROJECT_DIR$/osp/Memory/PageTableEntry.java" />
         <option value="$PROJECT_DIR$/osp/Memory/PageFaultHandler.java" />
+        <option value="$PROJECT_DIR$/osp/Memory/PageTableEntry.java" />
       </list>
     </option>
   </component>
@@ -606,12 +614,12 @@
       <option name="presentableId" value="Default" />
       <updated>1522725540316</updated>
       <workItem from="1522725541643" duration="146000" />
-      <workItem from="1522725695053" duration="24694000" />
+      <workItem from="1522725695053" duration="26406000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24840000" />
+    <option name="totallyTimeSpent" value="26552000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="623" y="0" width="817" height="900" extended-state="0" />
@@ -684,17 +692,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/osp/Memory/PageTableEntry.java">
+    <entry file="file://$PROJECT_DIR$/osp/Memory/PageFaultHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="68" column="70" lean-forward="false" selection-start-line="68" selection-start-column="70" selection-end-line="68" selection-end-column="70" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="e#2428#2429#0" expanded="false" />
-            <element signature="e#2460#2461#0" expanded="false" />
-            <element signature="e#2507#2508#0" expanded="false" />
-            <element signature="e#2549#2550#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="474">
+          <caret line="198" column="20" lean-forward="false" selection-start-line="198" selection-start-column="20" selection-end-line="198" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -706,25 +708,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/osp/Memory/PageFaultHandler.java">
+    <entry file="file://$PROJECT_DIR$/osp/Memory/MMU.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="210" column="16" lean-forward="false" selection-start-line="210" selection-start-column="16" selection-end-line="210" selection-end-column="16" />
+        <state relative-caret-position="443">
+          <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/osp/Memory/OSP.log">
       <provider selected="true" editor-type-id="LogFileEditorProvider">
-        <state relative-caret-position="625">
-          <caret line="96758" column="30" lean-forward="false" selection-start-line="96758" selection-start-column="30" selection-end-line="96758" selection-end-column="30" />
+        <state relative-caret-position="697">
+          <caret line="2838" column="59" lean-forward="true" selection-start-line="2838" selection-start-column="59" selection-end-line="2838" selection-end-column="59" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/osp/Memory/MMU.java">
+    <entry file="file://$PROJECT_DIR$/osp/Memory/PageTableEntry.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="194" column="42" lean-forward="false" selection-start-line="194" selection-start-column="42" selection-end-line="194" selection-end-column="42" />
+        <state relative-caret-position="186">
+          <caret line="60" column="42" lean-forward="true" selection-start-line="60" selection-start-column="42" selection-end-line="60" selection-end-column="42" />
           <folding />
         </state>
       </provider>
