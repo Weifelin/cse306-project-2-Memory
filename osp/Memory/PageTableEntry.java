@@ -67,6 +67,7 @@ public class PageTableEntry extends IflPageTableEntry
             if(getValidatingThread() == null){
             //pagefault occurs when getValidatingThread returns null.
                 ret = PageFaultHandler.handlePageFault(threadCB, MemoryLock, this);
+
             }else if(getValidatingThread().getID() != threadCB.getID()){
 //                getFrame().incrementLockCount();
 //                return SUCCESS;
@@ -92,7 +93,7 @@ public class PageTableEntry extends IflPageTableEntry
     public void do_unlock()
     {
         // your code goes here
-        if(getFrame().getLockCount() >= 1){
+        if(getFrame().getLockCount() > 0){
             getFrame().decrementLockCount();
         }
 

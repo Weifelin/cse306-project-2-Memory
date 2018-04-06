@@ -56,11 +56,11 @@ public class PageTable extends IflPageTable
             //PageTableEntry pageTableEntry = null;
 
 
-            if (frameTableEntry != null && frameTableEntry.getPage() != null && frameTableEntry.getPage().getTask() == taskCB){
+            if (frameTableEntry != null && frameTableEntry.getPage() != null && frameTableEntry.getPage().getTask().getID() == taskCB.getID()){
                 frameTableEntry.setPage(null);
                 frameTableEntry.setDirty(false);
                 frameTableEntry.setReferenced(false);
-                if (frameTableEntry.getReserved() == taskCB){
+                if (frameTableEntry.getReserved() != null && frameTableEntry.getReserved().getID() == taskCB.getID()){
                     frameTableEntry.setUnreserved(taskCB);
                 }
             }

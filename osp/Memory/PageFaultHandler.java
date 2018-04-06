@@ -90,6 +90,9 @@ public class PageFaultHandler extends IflPageFaultHandler
 		//MyOut.print(thread, "Current page is "+page+ ", and page.isValid()="+page.isValid());
 		FrameTableEntry frame = getFramebyLRU();
 
+		MyOut.print(thread, "This frame is "+frame+", frame.getReserved()="+frame.getReserved()
+		+", frame.getLockCount()="+frame.getLockCount()+", frame.isDirty()="+frame.isDirty());
+
 		if (frame == null){
 			return NotEnoughMemory;
 		}
@@ -109,31 +112,47 @@ public class PageFaultHandler extends IflPageFaultHandler
 		if (frame_page != null){
 			
 			if (frame.isDirty()){//dirty page, swap out
+
 				swap_out(frame, thread);
 
 				if (thread.getStatus()==ThreadKill){
+
+//					if (frame.getReserved()!= null && frame.getReserved().getID() == thread.getTask().getID()){
+//						frame.setUnreserved(thread.getTask());
+//					}
 					page.notifyThreads();
 					event.notifyThreads();
 					ThreadCB.dispatch();
 					return FAILURE;
 				}
 
-				frame.setDirty(false);
+				//frame.setDirty(false);
 			}
 
 			//clean page, free it
+			if (frame.getPage()!=null && !frame.getPage().isValid() && frame.getLockCount()>0){
+				while(frame.getLockCount()>0){
+					frame.getPage().do_unlock();
+				}
+			}
 			frame.setReferenced(false);
-			frame.setPage(null);
-			//frame.setDirty(false);
+			frame.setDirty(false);
 			frame_page.setValid(false);
 			frame_page.setFrame(null);
+			frame.setPage(null);
 		}
 
 		//perform swap in
 		page.setFrame(frame);
+		//frame.incrementLockCount();
 		swap_in(page, thread);
+		//frame.decrementLockCount();
 		page.setTimestamp(HClock.get());
 		if (thread.getStatus()==ThreadKill){
+
+//			if (frame.getReserved()!= null && frame.getReserved().getID() == thread.getTask().getID()){
+//            	frame.setUnreserved(thread.getTask());
+//			}
 			page.notifyThreads();
 			page.setValidatingThread(null);
 			event.notifyThreads();
@@ -141,9 +160,9 @@ public class PageFaultHandler extends IflPageFaultHandler
 			return FAILURE;
 		}
 
+
 		frame.setPage(page);
 		page.setValid(true);
-
 		frame.setUnreserved(thread.getTask());
 
 		page.setValidatingThread(null);
@@ -211,9 +230,9 @@ public class PageFaultHandler extends IflPageFaultHandler
 			//at this point, no free frames, use LRU
 			FrameTableEntry frameTableEntry = MMU.getFrame(i);
 			//PageTableEntry pageTableEntry = frameTableEntry.getPage();
-			if (!frameTableEntry.isReserved() && frameTableEntry.getLockCount()==0) {
+			if (!frameTableEntry.isReserved() && frameTableEntry.getLockCount()==0 && frameTableEntry.getPage()!=null) {
 				if (temp_page.getTimestamp() >= frameTableEntry.getPage().getTimestamp()) {
-					if (!frameTableEntry.isReserved() && frameTableEntry.getLockCount() == 0) {
+					if (!frameTableEntry.isReserved() && frameTableEntry.getLockCount() == 0 && frameTableEntry.getPage()!=null) {
 						//flag here
 						isUpdated++;
 						tempframe = frameTableEntry;
