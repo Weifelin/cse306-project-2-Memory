@@ -117,12 +117,14 @@ public class PageFaultHandler extends IflPageFaultHandler
 					ThreadCB.dispatch();
 					return FAILURE;
 				}
+
+				frame.setDirty(false);
 			}
 
 			//clean page, free it
 			frame.setReferenced(false);
 			frame.setPage(null);
-			frame.setDirty(false);
+			//frame.setDirty(false);
 			frame_page.setValid(false);
 			frame_page.setFrame(null);
 		}
@@ -143,6 +145,7 @@ public class PageFaultHandler extends IflPageFaultHandler
 		page.setValid(true);
 
 		frame.setUnreserved(thread.getTask());
+
 		page.setValidatingThread(null);
 		page.notifyThreads();
 		event.notifyThreads();

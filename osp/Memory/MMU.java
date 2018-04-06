@@ -180,9 +180,20 @@ class CleanDaemon implements DaemonInterface{
         }
 
         for (int i=0; i<5; i++) {
-            tempframe = MMU.getFrame(0);
+
             int isUpdated = 0;
+            int index = 0;
+            tempframe = MMU.getFrame(index);
             PageTableEntry temp_page = tempframe.getPage();//picking smallest timestamp
+            while (temp_page == null){
+                index++;
+                if (index == MMU.getFrameTableSize()){
+                    break;
+                }
+                tempframe = MMU.getFrame(index);
+                temp_page=tempframe.getPage();
+            }
+
             for (int j = 0; j < frameTableSize; j++) {
                 FrameTableEntry frameTableEntry = MMU.getFrame(i);
                 PageTableEntry pageTableEntry = frameTableEntry.getPage();
