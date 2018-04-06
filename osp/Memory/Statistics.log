@@ -1,0 +1,83 @@
+My implementation:
+DEVICES:
+  Device 0: Swap Device   (mount point: /vm/)
+	    Number of pages read = 975
+	    Number of pages written = 476
+	    Average number of cylinders swept per disk access = 7
+	      Total number of cylinders swept = 9463
+	    Service time per I/O request: 741
+  Device 1: Disk   (mount point: /etc/go/)
+	    Number of pages read = 27
+	    Number of pages written = 39
+	    Average number of cylinders swept per disk access = 1
+	      Total number of cylinders swept = 92
+	    Service time per I/O request: 126
+  Device 2: Disk   (mount point: /etc/)
+	    Number of pages read = 9
+	    Number of pages written = 12
+	    Average number of cylinders swept per disk access = 2
+	      Total number of cylinders swept = 40
+	    Service time per I/O request: 753
+
+TASKS and THREADS:
+  CPU Utilization: 84.4356%
+  Average service time per thread: 29273.201
+  Average normalized service time per thread: 0.056915537
+  Total number of tasks: 4
+  Running thread(s): Thread(140:13/RU), CPU usage 218 ticks
+
+Demo:
+DEVICES:
+  Device 0: Swap Device   (mount point: /vm/)
+	    Number of pages read = 1151
+	    Number of pages written = 281
+	    Average number of cylinders swept per disk access = 9
+	      Total number of cylinders swept = 12278
+	    Service time per I/O request: 1215
+  Device 1: Disk   (mount point: /etc/go/)
+	    Number of pages read = 19
+	    Number of pages written = 34
+	    Average number of cylinders swept per disk access = 2
+	      Total number of cylinders swept = 101
+	    Service time per I/O request: 477
+	    Device queue:  Empty
+  Device 2: Disk   (mount point: /etc/)
+	    Number of pages read = 7
+	    Number of pages written = 8
+	    Average number of cylinders swept per disk access = 1
+	      Total number of cylinders swept = 16
+	    Service time per I/O request: 736
+	    Device queue:  Empty
+
+TASKS and THREADS:
+  CPU Utilization: 56.0284%
+  Average service time per thread: 33355.95
+  Average normalized service time per thread: 0.045375008
+  Total number of tasks: 5
+  Running thread(s): Thread(133:8/RU), CPU usage 544 ticks
+
+
+Analysis:
+For the number of pages swapped in, my implementation is 975 while the demo is 1151.
+The number is reduced since my implementation uses LRU and the least recently used page are
+less likely to be used in the near future.
+
+For the number of pages swapped out, my implementation is 476 while the demo is 281.
+This is becuase the daemon is swapping out at most 5 least recently used pages every 20000 clock ticks.
+
+My implemenation has 84.4% CPU utilization while the demo has only 56%. Since less
+time is spent on pagefault/swapping in new pages, the waiting time is reduced and CPU
+can focus on its work.
+
+Same reason holds for the average service time per thread. Since less time is spent on
+waiting, my implemation has shorter average service time per thread.
+
+
+The average normalized service time for my implementation is 0.056915537 while the
+demo is 0.045375008. TurnaroundTime/ServiceTime. The difference is about 0.01.
+My average turnaround time is shorter than the demo, but the demo has shorter
+average normalized service time, which means it might have larger average service time.
+
+
+
+
